@@ -1,6 +1,6 @@
 import nc from 'next-connect';
 
-import { getAllRooms } from '../../../controllers/rooms';
+import { getAllRooms, createRoom } from '../../../controllers/rooms';
 import connectDB from '../../../config/db';
 
 connectDB();
@@ -8,5 +8,7 @@ connectDB();
 const handler = nc();
 
 handler.get(getAllRooms);
+
+handler.post(createRoom);
 
 export default handler;

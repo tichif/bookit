@@ -43,7 +43,7 @@ const roomSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    roomsCleaning: {
+    roomCleaning: {
       type: Boolean,
       default: false,
     },
@@ -80,26 +80,26 @@ const roomSchema = new mongoose.Schema(
         user: {
           type: mongoose.Schema.Types.ObjectId,
           ref: 'User',
-          required: true,
+          // required: true,
         },
         name: {
           type: String,
-          required: true,
+          // required: true,
         },
         rating: {
           type: Number,
-          required: true,
+          // required: true,
         },
         comment: {
           type: String,
-          required: true,
+          // required: true,
         },
       },
     ],
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
+      // required: true,
     },
   },
   {
