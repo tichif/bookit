@@ -5,7 +5,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seeder": "node utils/seeder"
   },
   "dependencies": {
     "mongoose": "^6.1.2",
