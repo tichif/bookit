@@ -1,6 +1,6 @@
 import nc from 'next-connect';
 
-import { getRomById } from '../../../controllers/rooms';
+import { getRomById, updateRoom } from '../../../controllers/rooms';
 import connectDB from '../../../config/db';
 
 connectDB();
@@ -8,5 +8,7 @@ connectDB();
 const handler = nc();
 
 handler.get(getRomById);
+
+handler.put(updateRoom);
 
 export default handler;
