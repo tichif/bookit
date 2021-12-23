@@ -41,4 +41,31 @@ const createRoom = async (req, res) => {
   }
 };
 
-export { getAllRooms, createRoom };
+// @path    /api/rooms/:id
+// @desc    Get a specific room
+// @access  Public
+const getRomById = async (req, res) => {
+  try {
+    const room = await Room.findById(req.query.id); // req.params.id in express ; req.query.id in next
+
+    if (!room) {
+      return res.status(404).json({
+        success: false,
+        error: 'Room not found',
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      room,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+export { getAllRooms, createRoom, getRomById };
