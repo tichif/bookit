@@ -20,7 +20,7 @@ const Home = () => {
             <b>No rooms found</b>
           </div>
         ) : (
-          rooms.map((room) => <RoomItem key={room._id} room={room} />)
+          rooms && rooms.map((room) => <RoomItem key={room._id} room={room} />)
         )}
       </div>
     </section>
