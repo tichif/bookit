@@ -1,16 +1,14 @@
 import Image from 'next/image';
 
+import logo from '../../public/images/bookit_logo.png';
+
 const Header = () => {
   return (
     <nav className='navbar row justify-content-center sticky-top'>
       <div className='container'>
         <div className='col-3 p-0'>
           <div className='navbar-brand'>
-            <Image
-              alt='Book It'
-              src='/images/bookit_logo.png'
-              style={{ cursor: 'pointer' }}
-            />
+            <Image alt='Book It' src={logo} style={{ cursor: 'pointer' }} />
           </div>
         </div>
 
