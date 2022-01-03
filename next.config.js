@@ -5,6 +5,6 @@ module.exports = {
       'mongodb+srv://tichif:tichif@bookit.zkgjb.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
   },
   images: {
-    domains: ['a0.muscache.com'],
+    domains: ['res.cloudinary.com'],
   },
 };
