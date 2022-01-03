@@ -7,7 +7,7 @@ import ApiFeatures from '../utils/apiFeatures';
 // @desc    Get all rooms
 // @access  Public
 const getAllRooms = asyncHandler(async (req, res) => {
-  const apiFeatures = new ApiFeatures(Room.find(), req.query).search();
+  const apiFeatures = new ApiFeatures(Room.find(), req.query).search().filter();
 
   const rooms = await apiFeatures.query;
 
