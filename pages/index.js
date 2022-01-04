@@ -16,6 +16,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
     const { req, query } = context;
 
-    await store.dispatch(getAllRooms(req, query.page));
+    await store.dispatch(getAllRooms(req, query.page, query.location));
   }
 );

@@ -11,12 +11,14 @@ import {
 
 // Get all rooms
 export const getAllRooms =
-  (req, page = 1) =>
+  (req, page = 1, location = '') =>
   async (dispatch) => {
     try {
       const { origin } = absoluteUrl(req);
 
-      const { data } = await axios.get(`${origin}/api/rooms?page=${page}`);
+      const { data } = await axios.get(
+        `${origin}/api/rooms?page=${page}&location=${location}`
+      );
 
       dispatch({
         type: ALL_ROOMS_SUCCESS,
