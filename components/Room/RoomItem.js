@@ -8,13 +8,13 @@ const RoomItem = ({ room }) => {
         <Image
           className='card-img-top mx-auto'
           src={room.images[0].url}
-          alt='Book it'
+          alt={room.name}
           width={170}
           height={170}
         />
         <div className='card-body d-flex flex-column'>
           <h5 className='card-title'>
-            <Link href={`/room/${room._id}`}>
+            <Link href={`/rooms/${room._id}`}>
               <a>{room.name}</a>
             </Link>
           </h5>
@@ -25,7 +25,10 @@ const RoomItem = ({ room }) => {
             </p>
 
             <div className='rating-outer'>
-              <div className='rating-inner'></div>
+              <div
+                className='rating-inner'
+                style={{ width: `${(room.ratings / 5) * 100}%` }}
+              ></div>
             </div>
             <span id='no_of_reviews'>({room.numOfReviews} Reviews)</span>
           </div>

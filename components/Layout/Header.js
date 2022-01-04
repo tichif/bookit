@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 import logo from '../../public/images/bookit_logo.png';
 
@@ -8,7 +9,11 @@ const Header = () => {
       <div className='container'>
         <div className='col-3 p-0'>
           <div className='navbar-brand'>
-            <Image alt='Book It' src={logo} className='logo' />
+            <Link href='/'>
+              <a>
+                <Image alt='Book It' src={logo} className='logo' />
+              </a>
+            </Link>
           </div>
         </div>
 
