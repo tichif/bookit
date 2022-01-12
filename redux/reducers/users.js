@@ -6,10 +6,7 @@ import {
 } from '../constants/users';
 
 // REGISTER USER reducers
-export const userRegisterReducer = (
-  state = { loading: true, user: null },
-  action
-) => {
+export const userRegisterReducer = (state = { user: null }, action) => {
   switch (action.type) {
     case REGISTER_USER_LOADING:
       return {

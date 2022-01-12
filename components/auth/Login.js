@@ -69,7 +69,7 @@ const Login = () => {
               {loading ? <ButtonLoader /> : 'LOGIN'}
             </button>
 
-            <Link href='#' className='float-right mt-3'>
+            <Link href='/register' className='float-right mt-3'>
               <a>New User?</a>
             </Link>
           </form>
