@@ -1,5 +1,5 @@
 import NextAuth from 'next-auth';
-import Providers from 'next-auth/providers';
+import CredentialsProvider from 'next-auth/providers/credentials';
 
 import User from '../../../models/User';
 import connectDB from '../../../config/db';
@@ -10,7 +10,7 @@ export default NextAuth({
     maxAge: 60 * 60 * 24, // 1d
   },
   providers: [
-    Providers.Credentials({
+    CredentialsProvider({
       async authorize(credentials) {
         connectDB();
 
