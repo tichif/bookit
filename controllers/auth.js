@@ -14,7 +14,7 @@ cloudinary.config({
 
 // @path    POST /api/auth/register
 // @desc    Register user
-// @access  Private
+// @access  Public
 export const register = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -34,5 +34,17 @@ export const register = asyncHandler(async (req, res) => {
   res.status(201).json({
     success: true,
     message: 'User registered successfully !!!',
+  });
+});
+
+// @path    GET /api/me
+// @desc    Current user profile
+// @access  Private
+export const getCurrentUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+
+  return res.status(200).json({
+    success: true,
+    user,
   });
 });

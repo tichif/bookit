@@ -38,11 +38,11 @@ export default NextAuth({
   ],
   callbacks: {
     // check if the user is existed and assign the user to the token
-    jwt: async (token, user) => {
+    jwt: async ({ token, user }) => {
       user && (token.user = user);
       return Promise.resolve(token);
     },
-    session: async (session, token) => {
+    session: async ({ session, token }) => {
       session.user = token.user;
       return Promise.resolve(session);
     },
