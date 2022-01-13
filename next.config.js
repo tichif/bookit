@@ -6,6 +6,8 @@ module.exports = {
     CLOUDINARY_CLOUD_NAME: 'di1rwb3im',
     CLOUDINARY_API_KEY: '478836676388755',
     CLOUDINARY_API_SECRET: '5nOUfmF6VApETPLMBTJi3AmGsQY',
+    FROM_NAME: 'Book It',
+    FROM_EMAIL: 'noreply@bookit.com',
   },
   images: {
     domains: ['res.cloudinary.com'],
