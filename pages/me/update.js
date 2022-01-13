@@ -1,31 +1,28 @@
 import { getSession } from 'next-auth/react';
 
-import Layout from '../components/Layout/Layout';
-import Login from '../components/auth/Login';
-
-const LoginPage = () => {
+const UpdateProfilePage = () => {
   return (
-    <Layout title='Login'>
-      <Login />
-    </Layout>
+    <div>
+      <h1>User Profile</h1>
+    </div>
   );
 };
 
 export async function getServerSideProps(context) {
   const session = await getSession({ req: context.req });
 
-  if (session) {
+  if (!session) {
     return {
       redirect: {
-        destination: '/',
+        destination: '/login',
         permanent: false,
       },
     };
   }
 
   return {
-    props: {},
+    props: { session },
   };
 }
 
-export default LoginPage;
+export default UpdateProfilePage;
