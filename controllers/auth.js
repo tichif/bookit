@@ -48,3 +48,45 @@ export const getCurrentUser = asyncHandler(async (req, res) => {
     user,
   });
 });
+
+// @path    PUT /api/me/update
+// @desc    Update user's profile
+// @access  Private
+export const updateUserProfile = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user._id);
+
+  if (!user) {
+    return next(new ErrorHandler('User not found', 404));
+  }
+
+  user.name = req.body.name || user.name;
+  user.email = req.body.email || user.email;
+
+  if (req.body.password) {
+    user.password = req.body.password || user.password;
+  }
+
+  // update avatar
+  if (req.body.avatar !== '') {
+    const image_id = user.avatar.public_id;
+    // Delete previous user's avatar
+    await cloudinary.v2.uploader.destroy(image_id);
+
+    const result = await cloudinary.v2.uploader.upload(req.body.avatar, {
+      folder: 'bookit/avatars',
+      width: '150',
+      crop: 'scale',
+    });
+
+    user.avatar = {
+      public_id: result.public_id,
+      url: result.secure_url,
+    };
+  }
+
+  await user.save();
+
+  return res.status(200).json({
+    success: true,
+  });
+});
