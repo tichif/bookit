@@ -1,10 +1,13 @@
 import { getSession } from 'next-auth/react';
 
+import Profile from '../../components/user/Profile';
+import Layout from '../../components/Layout/Layout';
+
 const UpdateProfilePage = () => {
   return (
-    <div>
-      <h1>User Profile</h1>
-    </div>
+    <Layout title='Update Profile'>
+      <Profile />
+    </Layout>
   );
 };
 
