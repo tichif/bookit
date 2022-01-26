@@ -94,7 +94,7 @@ export const updateUserProfile = (user) => async (dispatch) => {
 };
 
 // forgot user'password
-export const forgotUserPassword = (email) => async (dispatch) => {
+export const forgotUserPassword = (userEmail) => async (dispatch) => {
   try {
     dispatch({ type: FORGOT_PASSWORD_LOADING });
 
@@ -104,7 +104,11 @@ export const forgotUserPassword = (email) => async (dispatch) => {
       },
     };
 
-    const { data } = await axios.post(`/api/password/forgot`, email, config);
+    const { data } = await axios.post(
+      `/api/password/forgot`,
+      userEmail,
+      config
+    );
 
     dispatch({
       type: FORGOT_PASSWORD_SUCCESS,

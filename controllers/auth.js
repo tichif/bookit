@@ -109,7 +109,7 @@ export const forgotPassword = asyncHandler(async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
 
   // Create reset password url
-  const resetUrl = `${absoluteUrl(req).origin}/password/reset/${resetToken}`;
+  const resetUrl = `${absoluteUrl(req).origin}/password/reset/${token}`;
 
   const message = `
   <div>
