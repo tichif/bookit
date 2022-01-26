@@ -138,3 +138,41 @@ export const forgotPassword = asyncHandler(async (req, res, next) => {
     return next(new ErrorHandler('Server Error', 500));
   }
 });
+
+// @path    POST /api/password/reset/:token
+// @desc    ResetPassword
+// @access  Public
+export const resetPassword = asyncHandler(async (req, res, next) => {
+  // hash the URL token
+  const resetPasswordToken = crypto
+    .createHash('sha256')
+    .update(req.query.token)
+    .digest('hex');
+
+  const user = await User.findOne({
+    resetPasswordToken,
+    resetPasswordExpire: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    return next(
+      new ErrorHandler('Password reset token is invalid or expired.', 400)
+    );
+  }
+
+  if (req.body.password !== req.body.confirmPassword) {
+    return next(new ErrorHandler('Passwords not matched.', 400));
+  }
+
+  // Set new password
+  user.password = req.body.password;
+  user.resetPasswordToken = undefined;
+  user.resetPasswordExpire = undefined;
+
+  await user.save();
+
+  return res.status(200).json({
+    success: true,
+    message: 'Password updated successfully',
+  });
+});
