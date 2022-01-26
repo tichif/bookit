@@ -147,7 +147,7 @@ export const resetUserPassword = (token, userData) => async (dispatch) => {
 
     dispatch({
       type: RESET_PASSWORD_SUCCESS,
-      payload: data.message,
+      payload: data.success,
     });
   } catch (error) {
     dispatch({

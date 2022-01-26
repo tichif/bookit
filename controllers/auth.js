@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 import cloudinary from 'cloudinary';
 import absoluteUrl from 'next-absolute-url';
 
