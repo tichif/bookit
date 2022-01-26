@@ -13,6 +13,9 @@ import {
   FORGOT_PASSWORD_FAILED,
   FORGOT_PASSWORD_LOADING,
   FORGOT_PASSWORD_SUCCESS,
+  RESET_PASSWORD_FAILED,
+  RESET_PASSWORD_LOADING,
+  RESET_PASSWORD_SUCCESS,
   CLEAR_ERROR,
 } from '../constants/users';
 
@@ -117,6 +120,38 @@ export const forgotUserPassword = (userEmail) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: FORGOT_PASSWORD_FAILED,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : 'Erreur',
+    });
+  }
+};
+
+// forgot user'password
+export const resetUserPassword = (token, userData) => async (dispatch) => {
+  try {
+    dispatch({ type: RESET_PASSWORD_LOADING });
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    const { data } = await axios.post(
+      `/api/password/reset/${token}`,
+      userData,
+      config
+    );
+
+    dispatch({
+      type: RESET_PASSWORD_SUCCESS,
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: RESET_PASSWORD_FAILED,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

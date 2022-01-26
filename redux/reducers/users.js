@@ -12,6 +12,9 @@ import {
   FORGOT_PASSWORD_FAILED,
   FORGOT_PASSWORD_LOADING,
   FORGOT_PASSWORD_SUCCESS,
+  RESET_PASSWORD_FAILED,
+  RESET_PASSWORD_LOADING,
+  RESET_PASSWORD_SUCCESS,
   CLEAR_ERROR,
 } from '../constants/users';
 
@@ -117,6 +120,33 @@ export const userForgotPasswordReducer = (state = {}, action) => {
         message: action.payload,
       };
     case FORGOT_PASSWORD_FAILED:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    case CLEAR_ERROR:
+      return {
+        ...state,
+        error: null,
+      };
+    default:
+      return state;
+  }
+};
+
+// reset password reducers
+export const userResetPasswordReducer = (state = {}, action) => {
+  switch (action.type) {
+    case RESET_PASSWORD_LOADING:
+      return {
+        loading: true,
+      };
+    case RESET_PASSWORD_SUCCESS:
+      return {
+        loading: false,
+        success: action.payload,
+      };
+    case RESET_PASSWORD_FAILED:
       return {
         loading: false,
         error: action.payload,
