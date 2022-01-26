@@ -33,3 +33,42 @@ export const createBooking = asyncHandler(async (req, res) => {
     booking,
   });
 });
+
+// @path    GET /api/bookings/check
+// @desc    Check room availability
+// @access  Public
+export const checkBookingAvailability = asyncHandler(async (req, res) => {
+  let { roomId, checkInDate, checkOutDate } = req.query;
+
+  checkInDate = newDate(checkInDate);
+  checkOutDate = newDate(checkOutDate);
+
+  const bookings = await Booking.find({
+    room: roomId,
+    $and: [
+      {
+        checkInDate: {
+          $lte: checkOutDate,
+        },
+      },
+      {
+        checkOutDate: {
+          $gte: checkInDate,
+        },
+      },
+    ],
+  });
+
+  let isAvailable;
+
+  if (bookings && bookings.length === 0) {
+    isAvailable = true;
+  } else {
+    isAvailable = false;
+  }
+
+  return res.status(201).json({
+    success: true,
+    isAvailable,
+  });
+});
