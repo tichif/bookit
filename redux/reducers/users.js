@@ -46,7 +46,10 @@ export const userRegisterReducer = (state = { user: null }, action) => {
 };
 
 // LOAD USER reducers
-export const userLoadReducer = (state = { user: null }, action) => {
+export const userLoadReducer = (
+  state = { loading: true, user: null },
+  action
+) => {
   switch (action.type) {
     case LOAD_USER_LOADING:
       return {
