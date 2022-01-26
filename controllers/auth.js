@@ -93,7 +93,7 @@ export const updateUserProfile = asyncHandler(async (req, res, next) => {
   });
 });
 
-// @path    PUT /api/password/forgot
+// @path    POST /api/password/forgot
 // @desc    Send password recovery email
 // @access  Public
 export const forgotPassword = asyncHandler(async (req, res, next) => {

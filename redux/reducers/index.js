@@ -6,6 +6,7 @@ import {
   userRegisterReducer,
   userLoadReducer,
   userUpdateReducer,
+  userForgotPasswordReducer,
 } from './users';
 
 const reducer = combineReducers({
@@ -14,6 +15,7 @@ const reducer = combineReducers({
   userRegister: userRegisterReducer,
   userLoad: userLoadReducer,
   userUpdate: userUpdateReducer,
+  userForgotPassword: userForgotPasswordReducer,
 });
 
 export default reducer;
