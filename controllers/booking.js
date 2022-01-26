@@ -10,20 +10,22 @@ export const createBooking = asyncHandler(async (req, res) => {
   const {
     room,
     checkInDate,
-    checkoutDate,
+    checkOutDate,
     dayOfStay,
     amountPaid,
     paymentInfo,
+    paidAt,
   } = req.body;
 
   const booking = await Booking.create({
     room,
     user: req.user._id,
     checkInDate,
-    checkoutDate,
+    checkOutDate,
     dayOfStay,
     amountPaid,
     paymentInfo,
+    paidAt,
   });
 
   return res.status(201).json({
