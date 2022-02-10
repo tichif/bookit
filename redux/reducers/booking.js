@@ -3,6 +3,8 @@ import {
   CHECK_BOOKING_LOADING,
   CHECK_BOOKING_RESET,
   CHECK_BOOKING_SUCCESS,
+  BOOKED_DATES_FAILED,
+  BOOKED_DATES_SUCCESS,
   CLEAR_ERROR,
 } from '../constants/booking';
 
@@ -27,6 +29,29 @@ export const checkBookingsReducer = (state = { available: null }, action) => {
       return {
         loading: null,
         available: null,
+      };
+    case CLEAR_ERROR:
+      return {
+        ...state,
+        error: null,
+      };
+    default:
+      return state;
+  }
+};
+
+// booked dates reducer
+export const bookedDatesReducer = (state = { dates: [] }, action) => {
+  switch (action.type) {
+    case BOOKED_DATES_SUCCESS:
+      return {
+        loading: false,
+        dates: action.payload,
+      };
+    case BOOKED_DATES_FAILED:
+      return {
+        loading: false,
+        error: action.payload,
       };
     case CLEAR_ERROR:
       return {
