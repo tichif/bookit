@@ -109,7 +109,10 @@ export const getAllBookingDates = asyncHandler(async (req, res) => {
 // @desc    Get all bookings of current user
 // @access  Private
 export const getAllBookingsForUser = asyncHandler(async (req, res) => {
-  const bookings = await Booking.find({ user: req.user._id });
+  const bookings = await Booking.find({ user: req.user._id }).populate(
+    'user',
+    'name email'
+  );
 
   return res.status(200).json({
     success: true,
