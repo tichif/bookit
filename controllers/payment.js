@@ -1,5 +1,6 @@
 import absoluteUrl from 'next-absolute-url';
 import Stripe from 'stripe';
+import getRawBody from 'raw-body';
 
 import Room from '../models/Room';
 import User from '../models/User';
@@ -42,4 +43,52 @@ export const stripeCheckoutSession = asyncHandler(async (req, res) => {
   });
 
   res.status(200).json(session);
+});
+
+// @path    POST /api/webhook
+// @desc    Create new booking after payment
+// @access  Private
+export const webhookCheckout = asyncHandler(async (req, res) => {
+  const rawBody = await getRawBody(req);
+  try {
+    const signature = req.headers['stripe-signature'];
+
+    const event = stripe.webhooks.constructEvent(
+      rawBody,
+      signature,
+      process.env.STRIPE_WEBHOOK_SECRET
+    );
+
+    if (event.type === 'checkout.session.completed') {
+      const session = event.data.object;
+
+      const room = session.client_reference_id;
+      const user = req.user._id;
+      const amountPaid = session.amount_total / 100;
+      const paymentInfo = {
+        id: session.payment_intent,
+        status: session.payment_status,
+      };
+      const checkInDate = session.metadata.checkInDate;
+      const checkOutDate = session.metadata.checkOutDate;
+      const dayOfStay = session.metadata.dayOfStay;
+
+      await Booking.create({
+        room,
+        user,
+        checkInDate,
+        checkOutDate,
+        dayOfStay,
+        amountPaid,
+        paymentInfo,
+        paidAt: Date.now(),
+      });
+
+      return res.status(201).json({
+        success: true,
+      });
+    }
+  } catch (error) {
+    console.log('Error in Stripe CHeckout Payment:', error);
+  }
 });
