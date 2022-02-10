@@ -72,7 +72,7 @@ export const checkBookingAvailability = asyncHandler(async (req, res) => {
     isAvailable = false;
   }
 
-  return res.status(201).json({
+  return res.status(200).json({
     success: true,
     isAvailable,
   });
@@ -99,7 +99,7 @@ export const getAllBookingDates = asyncHandler(async (req, res) => {
     bookedDates = bookedDates.concat(dates);
   });
 
-  return res.status(201).json({
+  return res.status(200).json({
     success: true,
     bookedDates,
   });
@@ -111,8 +111,23 @@ export const getAllBookingDates = asyncHandler(async (req, res) => {
 export const getAllBookingsForUser = asyncHandler(async (req, res) => {
   const bookings = await Booking.find({ user: req.user._id });
 
-  return res.status(201).json({
+  return res.status(200).json({
     success: true,
     bookings,
+  });
+});
+
+// @path    GET /api/bookings/:id
+// @desc    Get booking detail
+// @access  Private
+export const getBookingDetail = asyncHandler(async (req, res) => {
+  const booking = await Booking.findById(req.query.id).populate(
+    'user',
+    'name email'
+  );
+
+  return res.status(201).json({
+    success: true,
+    booking,
   });
 });
