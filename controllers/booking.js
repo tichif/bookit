@@ -1,7 +1,12 @@
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+
 import Booking from '../models/Booking';
 import ErrorHandler from '../utils/errorHandler';
 import asyncHandler from '../middlewares/asyncHandler';
 import ApiFeatures from '../utils/apiFeatures';
+
+const moment = extendMoment(Moment);
 
 // @path    POST /api/bookings
 // @desc    Book a room
@@ -70,5 +75,32 @@ export const checkBookingAvailability = asyncHandler(async (req, res) => {
   return res.status(201).json({
     success: true,
     isAvailable,
+  });
+});
+
+// @path    GET /api/bookings/check_booked_dates
+// @desc    Get all dates already booked for a room
+// @access  Public
+export const getAllBookingDates = asyncHandler(async (req, res) => {
+  const { roomId } = req.query;
+
+  const bookings = await Booking.find({ room: roomId });
+
+  let bookedDates = [];
+
+  bookings.forEach((booking) => {
+    const range = moment.range(
+      moment(booking.checkInDate),
+      moment(booking.checkOutDate)
+    );
+
+    const dates = Array.from(range.by('day'));
+
+    bookedDates = bookedDates.concat(dates);
+  });
+
+  return res.status(201).json({
+    success: true,
+    bookedDates,
   });
 });
