@@ -11,7 +11,10 @@ import { useRouter } from 'next/router';
 
 import { clearError } from '../../redux/actions/rooms';
 import RoomFeatures from './RoomFeatures';
-import { checkBookingAvailability } from '../../redux/actions/bookings';
+import {
+  checkBookingAvailability,
+  getBookedDates,
+} from '../../redux/actions/bookings';
 import { CHECK_BOOKING_RESET } from '../../redux/constants/booking';
 
 const RoomDetail = () => {
@@ -21,18 +24,28 @@ const RoomDetail = () => {
   const [checkOutDate, setCheckOutDate] = useState();
   const [dayOfStay, setDayOfStay] = useState(0);
 
+  const router = useRouter();
+
   const dispatch = useDispatch();
 
   const { available, loading } = useSelector((state) => state.checkBooking);
 
+  const { dates } = useSelector((state) => state.bookedDates);
+
+  const excludedDates = [];
+  dates.forEach((date) => {
+    excludedDates.push(new Date(date));
+  });
+
   const { user } = useSelector((state) => state.userLoad);
 
   useEffect(() => {
+    dispatch(getBookedDates(router.query.id));
     if (error) {
       toast.error(error);
       dispatch(clearError());
     }
-  }, [error, dispatch]);
+  }, [error, dispatch, router]);
 
   const onChangeHandler = (dates) => {
     const [checkIn, checkOut] = dates;
@@ -55,8 +68,6 @@ const RoomDetail = () => {
       );
     }
   };
-
-  const router = useRouter();
 
   const newBookingHandler = async () => {
     const bookingData = {
@@ -146,6 +157,7 @@ const RoomDetail = () => {
                 startDate={checkInDate}
                 endDate={checkOutDate}
                 minDate={new Date()}
+                excludeDates={excludedDates}
                 selectsRange
                 inline
               />
