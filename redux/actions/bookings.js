@@ -6,6 +6,8 @@ import {
   CHECK_BOOKING_SUCCESS,
   BOOKED_DATES_FAILED,
   BOOKED_DATES_SUCCESS,
+  MY_BOOKINGS_FAILED,
+  MY_BOOKINGS_SUCCESS,
   CLEAR_ERROR,
 } from '../constants/booking';
 
@@ -48,6 +50,26 @@ export const getBookedDates = (roomId) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: BOOKED_DATES_FAILED,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : 'Erreur',
+    });
+  }
+};
+
+// get all my bookings
+export const getMyBookings = () => async (dispatch) => {
+  try {
+    const { data } = await axios.get(`/api/bookings/me`);
+
+    dispatch({
+      type: MY_BOOKINGS_SUCCESS,
+      payload: data.bookings,
+    });
+  } catch (error) {
+    dispatch({
+      type: MY_BOOKINGS_FAILED,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
