@@ -16,6 +16,7 @@ import {
   getBookedDates,
 } from '../../redux/actions/bookings';
 import { CHECK_BOOKING_RESET } from '../../redux/constants/booking';
+import getStripe from '../../utils/getStripe';
 
 const RoomDetail = () => {
   const { room, error } = useSelector((state) => state.roomDetail);
@@ -23,6 +24,7 @@ const RoomDetail = () => {
   const [checkInDate, setCheckInDate] = useState();
   const [checkOutDate, setCheckOutDate] = useState();
   const [dayOfStay, setDayOfStay] = useState(0);
+  const [paymentLoading, setPaymentLoading] = useState(false);
 
   const router = useRouter();
 
@@ -39,12 +41,38 @@ const RoomDetail = () => {
 
   const { user } = useSelector((state) => state.userLoad);
 
+  const bookRoom = async (id, pricePerNite) => {
+    setPaymentLoading(true);
+
+    const amount = pricePerNite * dayOfStay;
+    try {
+      const link = `/api/checkout_session/${id}?amount=${amount}&checkInDate=${checkInDate.toISOString()}&checkOutDate=${checkOutDate.toISOString()}&dayOfStay=${dayOfStay}`;
+
+      const { data } = await axios.get(link);
+
+      const stripe = await getStripe();
+
+      // Redirect to checkout
+      stripe.redirectToCheckout({ sessionId: data.id });
+
+      setPaymentLoading(false);
+    } catch (error) {
+      console.log(error);
+      toast.error(error);
+      setPaymentLoading(false);
+    }
+  };
+
   useEffect(() => {
     dispatch(getBookedDates(router.query.id));
     if (error) {
       toast.error(error);
       dispatch(clearError());
     }
+
+    return () => {
+      dispatch({ type: CHECK_BOOKING_RESET });
+    };
   }, [error, dispatch, router]);
 
   const onChangeHandler = (dates) => {
@@ -182,10 +210,11 @@ const RoomDetail = () => {
 
               {available && user && (
                 <button
+                  disabled={paymentLoading || loading ? true : false}
                   className='btn btn-block py-3 booking-btn'
-                  onClick={newBookingHandler}
+                  onClick={() => bookRoom(room._id, room.price)}
                 >
-                  Pay
+                  Pay - ${dayOfStay * room.price}
                 </button>
               )}
             </div>
