@@ -1,4 +1,5 @@
 import axios from 'axios';
+import absoluteUrl from 'next-absolute-url';
 
 import {
   CHECK_BOOKING_FAILED,
@@ -59,9 +60,17 @@ export const getBookedDates = (roomId) => async (dispatch) => {
 };
 
 // get all my bookings
-export const getMyBookings = () => async (dispatch) => {
+export const getMyBookings = (authCookie, req) => async (dispatch) => {
   try {
-    const { data } = await axios.get(`/api/bookings/me`);
+    const config = {
+      headers: {
+        cookie: authCookie,
+      },
+    };
+
+    const { origin } = absoluteUrl(req);
+
+    const { data } = await axios.get(`${origin}/api/bookings/me`, config);
 
     dispatch({
       type: MY_BOOKINGS_SUCCESS,
