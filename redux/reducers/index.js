@@ -10,6 +10,8 @@ import {
   userResetPasswordReducer,
 } from './users';
 
+import { checkBookingsReducer } from './booking';
+
 const reducer = combineReducers({
   allRooms: allRoomsReducer,
   roomDetail: roomDetailsReducer,
@@ -18,6 +20,7 @@ const reducer = combineReducers({
   userUpdate: userUpdateReducer,
   userForgotPassword: userForgotPasswordReducer,
   userResetPassword: userResetPasswordReducer,
+  checkBooking: checkBookingsReducer,
 });
 
 export default reducer;
