@@ -104,3 +104,15 @@ export const getAllBookingDates = asyncHandler(async (req, res) => {
     bookedDates,
   });
 });
+
+// @path    GET /api/bookings/me
+// @desc    Get all bookings of current user
+// @access  Private
+export const getAllBookingsForUser = asyncHandler(async (req, res) => {
+  const bookings = await Booking.find({ user: req.user._id });
+
+  return res.status(201).json({
+    success: true,
+    bookings,
+  });
+});
