@@ -40,8 +40,8 @@ export const createBooking = asyncHandler(async (req, res) => {
 export const checkBookingAvailability = asyncHandler(async (req, res) => {
   let { roomId, checkInDate, checkOutDate } = req.query;
 
-  checkInDate = newDate(checkInDate);
-  checkOutDate = newDate(checkOutDate);
+  checkInDate = new Date(checkInDate);
+  checkOutDate = new Date(checkOutDate);
 
   const bookings = await Booking.find({
     room: roomId,

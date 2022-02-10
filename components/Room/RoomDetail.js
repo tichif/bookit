@@ -11,6 +11,8 @@ import { useRouter } from 'next/router';
 
 import { clearError } from '../../redux/actions/rooms';
 import RoomFeatures from './RoomFeatures';
+import { checkBookingAvailability } from '../../redux/actions/bookings';
+import { CHECK_BOOKING_RESET } from '../../redux/constants/booking';
 
 const RoomDetail = () => {
   const { room, error } = useSelector((state) => state.roomDetail);
@@ -20,6 +22,10 @@ const RoomDetail = () => {
   const [dayOfStay, setDayOfStay] = useState(0);
 
   const dispatch = useDispatch();
+
+  const { available, loading } = useSelector((state) => state.checkBooking);
+
+  const { user } = useSelector((state) => state.userLoad);
 
   useEffect(() => {
     if (error) {
@@ -39,6 +45,14 @@ const RoomDetail = () => {
         (new Date(checkOut) - new Date(checkIn)) / 86400000 + 1
       ); // 60 * 60 * 24 * 1000
       setDayOfStay(days);
+
+      dispatch(
+        checkBookingAvailability(
+          router.query.id,
+          checkIn.toISOString(),
+          checkOut.toISOString()
+        )
+      );
     }
   };
 
@@ -131,16 +145,37 @@ const RoomDetail = () => {
                 onChange={onChangeHandler}
                 startDate={checkInDate}
                 endDate={checkOutDate}
+                minDate={new Date()}
                 selectsRange
                 inline
               />
 
-              <button
-                className='btn btn-block py-3 booking-btn'
-                onClick={newBookingHandler}
-              >
-                Pay
-              </button>
+              {available === true && (
+                <div className='alert alert-success my-3 font-weight-bold'>
+                  Room is available. Book Now
+                </div>
+              )}
+
+              {available === false && (
+                <div className='alert alert-danger my-3 font-weight-bold'>
+                  Room is not available. Try different dates
+                </div>
+              )}
+
+              {available && !user && (
+                <div className='alert alert-danger my-3 font-weight-bold'>
+                  Login to book this room.
+                </div>
+              )}
+
+              {available && user && (
+                <button
+                  className='btn btn-block py-3 booking-btn'
+                  onClick={newBookingHandler}
+                >
+                  Pay
+                </button>
+              )}
             </div>
           </div>
         </div>
