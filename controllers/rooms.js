@@ -92,4 +92,57 @@ const deleteRoom = asyncHandler(async (req, res, next) => {
   });
 });
 
-export { getAllRooms, createRoom, getRomById, updateRoom, deleteRoom };
+// @path    PUT /api/reviews
+// @desc    Create a new review for a room
+// @access  Private
+const createReview = asyncHandler(async (req, res, next) => {
+  const { rating, comment, roomId } = req.body;
+
+  const review = {
+    user: req.user._id,
+    name: req.user.name,
+    rating: Number(rating),
+    comment,
+  };
+
+  const room = await Room.findById(roomId); // req.params.id in express ; req.query.id in next
+
+  if (!room) {
+    return next(new ErrorHandler('Room not found', 404));
+  }
+
+  const isReviewed = room.reviews.find(
+    (room) => room.user.toString() === req.user._id.toString()
+  );
+
+  if (isReviewed) {
+    room.reviews.forEach((review) => {
+      if (review.user.toString() === req.user._id.toString()) {
+        review.comment = comment;
+        review.rating = Number(rating);
+      }
+    });
+  } else {
+    room.reviews.push(review);
+    room.numOfReviews = room.reviews.length;
+  }
+
+  room.ratings =
+    room.reviews.reduce((acc, item) => item.rating + acc, 0) /
+    room.reviews.length;
+
+  await room.save({ validateBeforeSave: false });
+
+  return res.status(200).json({
+    success: true,
+  });
+});
+
+export {
+  getAllRooms,
+  createRoom,
+  getRomById,
+  updateRoom,
+  deleteRoom,
+  createReview,
+};
