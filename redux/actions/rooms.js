@@ -6,6 +6,9 @@ import {
   ALL_ROOMS_SUCCESS,
   ROOM_DETAIL_FAILED,
   ROOM_DETAIL_SUCCESS,
+  CREATE_REVIEW_FAILED,
+  CREATE_REVIEW_LOADING,
+  CREATE_REVIEW_SUCCESS,
   CLEAR_ERROR,
 } from '../constants/rooms';
 
@@ -56,6 +59,31 @@ export const getRoomDetail = (req, id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: ROOM_DETAIL_FAILED,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+//  crete review
+export const createReview = (review) => async (dispatch) => {
+  try {
+    dispatch({ type: CREATE_REVIEW_LOADING });
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    const { data } = await axios.put(`/api/reviews`, review, config);
+
+    dispatch({
+      type: CREATE_REVIEW_SUCCESS,
+      payload: data.success,
+    });
+  } catch (error) {
+    dispatch({
+      type: CREATE_REVIEW_FAILED,
       payload: error.response.data.message,
     });
   }

@@ -3,6 +3,10 @@ import {
   ALL_ROOMS_SUCCESS,
   ROOM_DETAIL_FAILED,
   ROOM_DETAIL_SUCCESS,
+  CREATE_REVIEW_FAILED,
+  CREATE_REVIEW_LOADING,
+  CREATE_REVIEW_RESET,
+  CREATE_REVIEW_SUCCESS,
   CLEAR_ERROR,
 } from '../constants/rooms';
 
@@ -40,6 +44,37 @@ export const roomDetailsReducer = (state = { room: {} }, action) => {
     case ROOM_DETAIL_FAILED:
       return {
         error: action.payload,
+      };
+    case CLEAR_ERROR:
+      return {
+        ...state,
+        error: null,
+      };
+    default:
+      return state;
+  }
+};
+
+// create review reducer
+export const createReviewReducer = (state = {}, action) => {
+  switch (action.type) {
+    case CREATE_REVIEW_LOADING:
+      return {
+        loading: true,
+      };
+    case CREATE_REVIEW_SUCCESS:
+      return {
+        loading: false,
+        success: action.payload,
+      };
+    case CREATE_REVIEW_FAILED:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    case CREATE_REVIEW_RESET:
+      return {
+        success: false,
       };
     case CLEAR_ERROR:
       return {
