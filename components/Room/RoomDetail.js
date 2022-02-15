@@ -17,6 +17,7 @@ import {
 } from '../../redux/actions/bookings';
 import { CHECK_BOOKING_RESET } from '../../redux/constants/booking';
 import getStripe from '../../utils/getStripe';
+import NewReview from '../review/NewReview';
 
 const RoomDetail = () => {
   const { room, error } = useSelector((state) => state.roomDetail);
@@ -220,6 +221,8 @@ const RoomDetail = () => {
             </div>
           </div>
         </div>
+
+        <NewReview />
 
         <div className='reviews w-75'>
           <h3>Reviews:</h3>
