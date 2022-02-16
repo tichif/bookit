@@ -158,6 +158,18 @@ const checkReviewAvailability = asyncHandler(async (req, res, next) => {
   });
 });
 
+// @path    GET /api/admin/rooms
+// @desc    Get all the rooms
+// @access  Private - Admin
+const getAllRoomsForAdmin = asyncHandler(async (req, res, next) => {
+  const rooms = await Room.find({});
+
+  return res.status(200).json({
+    success: true,
+    rooms,
+  });
+});
+
 export {
   getAllRooms,
   createRoom,
@@ -166,4 +178,5 @@ export {
   deleteRoom,
   createReview,
   checkReviewAvailability,
+  getAllRoomsForAdmin,
 };

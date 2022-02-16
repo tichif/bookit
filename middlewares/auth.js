@@ -13,3 +13,12 @@ export const isAuthenticatedUser = asyncHandler(async (req, res, next) => {
   req.user = session.user;
   next();
 });
+
+export const authorize = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return next(new ErrorHandler('Unauthorized !!!', 403));
+    }
+    next();
+  };
+};
