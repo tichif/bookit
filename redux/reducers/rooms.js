@@ -7,6 +7,9 @@ import {
   CREATE_REVIEW_LOADING,
   CREATE_REVIEW_RESET,
   CREATE_REVIEW_SUCCESS,
+  REVIEW_AVAILABILITY_FAILED,
+  REVIEW_AVAILABILITY_LOADING,
+  REVIEW_AVAILABILITY_SUCCESS,
   CLEAR_ERROR,
 } from '../constants/rooms';
 
@@ -75,6 +78,36 @@ export const createReviewReducer = (state = {}, action) => {
     case CREATE_REVIEW_RESET:
       return {
         success: false,
+      };
+    case CLEAR_ERROR:
+      return {
+        ...state,
+        error: null,
+      };
+    default:
+      return state;
+  }
+};
+
+// create review reducer
+export const reviewAvailabilityReducer = (
+  state = { reviewAvailable: null },
+  action
+) => {
+  switch (action.type) {
+    case REVIEW_AVAILABILITY_LOADING:
+      return {
+        loading: true,
+      };
+    case REVIEW_AVAILABILITY_SUCCESS:
+      return {
+        loading: false,
+        reviewAvailable: action.payload,
+      };
+    case REVIEW_AVAILABILITY_FAILED:
+      return {
+        loading: false,
+        error: action.payload,
       };
     case CLEAR_ERROR:
       return {

@@ -9,6 +9,9 @@ import {
   CREATE_REVIEW_FAILED,
   CREATE_REVIEW_LOADING,
   CREATE_REVIEW_SUCCESS,
+  REVIEW_AVAILABILITY_FAILED,
+  REVIEW_AVAILABILITY_LOADING,
+  REVIEW_AVAILABILITY_SUCCESS,
   CLEAR_ERROR,
 } from '../constants/rooms';
 
@@ -84,6 +87,33 @@ export const createReview = (review) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: CREATE_REVIEW_FAILED,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+//  check review availability
+export const checkReviewAvailability = (roomId) => async (dispatch) => {
+  try {
+    dispatch({ type: REVIEW_AVAILABILITY_LOADING });
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    const { data } = await axios.get(
+      `/api/reviews/check_review_availability?roomId=${roomId}`
+    );
+
+    dispatch({
+      type: REVIEW_AVAILABILITY_SUCCESS,
+      payload: data.isReviewAvailable,
+    });
+  } catch (error) {
+    dispatch({
+      type: REVIEW_AVAILABILITY_FAILED,
       payload: error.response.data.message,
     });
   }
