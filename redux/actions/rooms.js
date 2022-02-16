@@ -131,7 +131,7 @@ export const getAllRoomsForAdmin = () => async (dispatch) => {
 
     dispatch({
       type: ADMIN_ROOMS_SUCCESS,
-      payload: data.room,
+      payload: data.rooms,
     });
   } catch (error) {
     dispatch({
