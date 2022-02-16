@@ -17,6 +17,10 @@ import {
   CREATE_ROOM_LOADING,
   CREATE_ROOM_RESET,
   CREATE_ROOM_SUCCESS,
+  UPDATE_ROOM_FAILED,
+  UPDATE_ROOM_LOADING,
+  UPDATE_ROOM_RESET,
+  UPDATE_ROOM_SUCCESS,
   CLEAR_ERROR,
 } from '../constants/rooms';
 
@@ -161,6 +165,37 @@ export const createRoomReducer = (state = { room: {} }, action) => {
     case CREATE_ROOM_RESET:
       return {
         success: false,
+      };
+    case CLEAR_ERROR:
+      return {
+        ...state,
+        error: null,
+      };
+    default:
+      return state;
+  }
+};
+
+// update review reducer
+export const updateRoomReducer = (state = {}, action) => {
+  switch (action.type) {
+    case UPDATE_ROOM_LOADING:
+      return {
+        loading: true,
+      };
+    case UPDATE_ROOM_SUCCESS:
+      return {
+        loading: false,
+        isUpdated: action.payload,
+      };
+    case UPDATE_ROOM_FAILED:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    case UPDATE_ROOM_RESET:
+      return {
+        isUpdated: false,
       };
     case CLEAR_ERROR:
       return {

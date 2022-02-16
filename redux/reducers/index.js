@@ -6,6 +6,7 @@ import {
   createReviewReducer,
   reviewAvailabilityReducer,
   createRoomReducer,
+  updateRoomReducer,
 } from './rooms';
 
 import {
@@ -38,6 +39,7 @@ const reducer = combineReducers({
   createReview: createReviewReducer,
   reviewAvailability: reviewAvailabilityReducer,
   createRoom: createRoomReducer,
+  updateRoom: updateRoomReducer,
 });
 
 export default reducer;
