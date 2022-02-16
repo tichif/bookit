@@ -1,8 +1,17 @@
+import cloudinary from 'cloudinary';
+
 import Room from '../models/Room';
 import Booking from '../models/Booking';
 import ErrorHandler from '../utils/errorHandler';
 import asyncHandler from '../middlewares/asyncHandler';
 import ApiFeatures from '../utils/apiFeatures';
+
+// Setting the cloudinary config
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 // @path    GET /api/rooms
 // @desc    Get all rooms
@@ -30,6 +39,26 @@ const getAllRooms = asyncHandler(async (req, res) => {
 // @desc    Create a room
 // @access  Private
 const createRoom = asyncHandler(async (req, res) => {
+  const images = req.body.images;
+
+  let imagesLink = [];
+
+  for (let i = 0; i < images.length; i++) {
+    const result = await cloudinary.v2.uploader.upload(images[i], {
+      folder: 'bookit/rooms',
+      width: '150',
+      crop: 'scale',
+    });
+
+    imagesLink.push({
+      public_id: result.public_id,
+      url: result.secure_url,
+    });
+  }
+
+  req.body.images = imagesLink;
+  req.body.user = req.user._id;
+
   const room = await Room.create(req.body);
 
   res.status(201).json({
