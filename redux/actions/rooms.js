@@ -12,6 +12,9 @@ import {
   REVIEW_AVAILABILITY_FAILED,
   REVIEW_AVAILABILITY_LOADING,
   REVIEW_AVAILABILITY_SUCCESS,
+  ADMIN_ROOMS_FAILED,
+  ADMIN_ROOMS_LOADING,
+  ADMIN_ROOMS_SUCCESS,
   CLEAR_ERROR,
 } from '../constants/rooms';
 
@@ -114,6 +117,25 @@ export const checkReviewAvailability = (roomId) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: REVIEW_AVAILABILITY_FAILED,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Get all admin roms
+export const getAllRoomsForAdmin = () => async (dispatch) => {
+  try {
+    dispatch({ type: ADMIN_ROOMS_LOADING });
+
+    const { data } = await axios.get(`/api/admin/rooms`);
+
+    dispatch({
+      type: ADMIN_ROOMS_SUCCESS,
+      payload: data.room,
+    });
+  } catch (error) {
+    dispatch({
+      type: ADMIN_ROOMS_FAILED,
       payload: error.response.data.message,
     });
   }
