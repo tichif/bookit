@@ -46,8 +46,6 @@ const createRoom = asyncHandler(async (req, res) => {
   for (let i = 0; i < images.length; i++) {
     const result = await cloudinary.v2.uploader.upload(images[i], {
       folder: 'bookit/rooms',
-      width: '150',
-      crop: 'scale',
     });
 
     imagesLink.push({
@@ -92,6 +90,29 @@ const updateRoom = asyncHandler(async (req, res, next) => {
   if (!room) {
     return next(new ErrorHandler('Room not found', 404));
   }
+
+  let imagesLink = [];
+
+  if (req.body.images) {
+    // Delete images
+    for (let i = 0; i < room.images.length; i++) {
+      await cloudinary.v2.uploader.destroy(room.images[i].public_id);
+    }
+
+    for (let i = 0; i < req.body.images.length; i++) {
+      const result = await cloudinary.v2.uploader.upload(req.body.images[i], {
+        folder: 'bookit/rooms',
+      });
+
+      imagesLink.push({
+        public_id: result.public_id,
+        url: result.secure_url,
+      });
+    }
+  }
+
+  req.body.images = imagesLink;
+  req.body.user = req.user._id;
 
   const updatedRoom = await Room.findByIdAndUpdate(room._id, req.body, {
     new: true,
