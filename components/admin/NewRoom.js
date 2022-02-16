@@ -38,10 +38,9 @@ const NewRoom = () => {
     }
 
     if (success) {
+      dispatch({ type: CREATE_ROOM_RESET });
       router.push('/admin/rooms');
     }
-
-    () => dispatch({ type: CREATE_ROOM_RESET });
   }, [dispatch, error, router, success]);
 
   const submitHandler = (e) => {
@@ -63,6 +62,9 @@ const NewRoom = () => {
       breakfast,
     };
 
+    if (images.length === 0) {
+      return toast.error('Please upload images');
+    }
     dispatch(createRoom(room));
   };
 
